@@ -23,9 +23,7 @@ public class Assig4
     */
    public static void main(String[] args)
    { 
-      int i = 105;
-      String letter  =  Character.toString((char)i);
-      System.out.println(letter);
+     
    }
    
    public interface BarcodeIO
@@ -41,42 +39,28 @@ public class Assig4
    
    class BarcodeImage implements Cloneable
    {
+      //dimensions of 2D array
+      public static final int MAX_HEIGHT = 30;
+      public static final int MAX_WIDTH = 65;
+      //image data
+      private boolean[][] imageData;
+            
+      //methods
+      public BarcodeImage()
+      {
+         imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
+
+      }
+      public BarcodeImage(String[] str_data) 
+      {
+         
+      }
+      
+      
       
    }
    
-   class DataMatrix implements BarcodeIO
-   {
-      public boolean scan( BarcodeImage bc )
-      {
-         
-      }
-      
-      public boolean readText( String text )
-      {
-         
-      }
-      
-      public boolean generateImageFromText()
-      {
-         
-      }
-      
-      public boolean translateImageToText()
-      {
-         
-      }
-      
-      public void displayTextToConsole()
-      {
-         
-      }
-      
-      void displayImageToConsole()
-      {
-         
-      }
-   }
-   
+  
    
    
 }
