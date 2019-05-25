@@ -36,4 +36,45 @@ public class Assig4
       public void displayImageToConsole();
    
    }
+   
+   class BarcodeImage implements Cloneable
+   {
+      
+   }
+   
+   class DataMatrix implements BarcodeIO
+   {
+      public boolean scan( BarcodeImage bc )
+      {
+         
+      }
+      
+      public boolean readText( String text )
+      {
+         
+      }
+      
+      public boolean generateImageFromText()
+      {
+         
+      }
+      
+      public boolean translateImageToText()
+      {
+         
+      }
+      
+      public void displayTextToConsole()
+      {
+         
+      }
+      
+      void displayImageToConsole()
+      {
+         
+      }
+   }
+   
+   
+   
 }
