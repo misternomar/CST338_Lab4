@@ -151,7 +151,8 @@ public class Assig4
 
       private boolean checkSize(int row, int col)
       {
-         return (row < MAX_HEIGHT && col < MAX_WIDTH);
+         //Checks for bounds of rows and col being within Max height/width
+         return (row < MAX_HEIGHT && row > 0 && col < MAX_WIDTH && col > 0 );
       }
 
       private boolean checkSize(String[] data)
