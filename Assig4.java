@@ -17,7 +17,7 @@ import java.util.*;
 public class Assig4
 {
    /**
-    * Starting point for program
+    * main() 
     *
     * @param args the command line arguments
     */
@@ -86,10 +86,10 @@ public class Assig4
       dm.displayTextToConsole();
       dm.displayImageToConsole();
    }   
-   /*
-    * Phase1
-    */
-   public interface BarcodeIO
+   /**
+    * BarcodeIO
+    **/
+   interface BarcodeIO
    {
       public boolean scan(BarcodeImage bc);
       public boolean readText(String text);
@@ -99,26 +99,37 @@ public class Assig4
       public void displayImageToConsole();
    }
    
-   /*
-    * Phase2
-    */
+
+   /**
+    * stores and retrieves 2D data thought
+    * of conceptually as an image of a 
+    * square or rectangular bar code
+   */
    public static class BarcodeImage implements Cloneable
    {
       // dimensions of 2D array
       public static final int MAX_HEIGHT = 30;
       public static final int MAX_WIDTH = 65;
       // image data
-      private boolean[][] imageData;
+      private boolean[][] image_data;
 
-      // methods
+      /**
+       * Default constructor
+       **/
       public BarcodeImage()
       {
-         imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
+         image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
       }
-
+      
+      /**
+       * Constructor for BarcodeImage -
+       * Takes a 1D array of Strings and 
+       * converts it to the internal 2D 
+       * array of booleans.
+       */      
       public BarcodeImage(String[] str_data)
       {
-         imageData = new boolean[MAX_HEIGHT][MAX_WIDTH];
+         image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
          for (int row = 0; row < str_data.length - 1; row++)
          {
             for (int column = 0; column < str_data[row].length() - 1; column++)
@@ -133,7 +144,7 @@ public class Assig4
       {
          if (checkSize(row, col))
          {
-            this.imageData[row][col] = value;
+            this.image_data[row][col] = value;
             return true;
          }
          return false;
@@ -143,12 +154,11 @@ public class Assig4
       {
          if (checkSize(row, col))
          {
-            return this.imageData[row][col];
+            return this.image_data[row][col];
          }
          return false;
       }
      
-
       private boolean checkSize(int row, int col)
       {
          //Checks for bounds of rows and col being within Max height/width
@@ -159,7 +169,7 @@ public class Assig4
       {
          return false;
       }
-      
+
       public BarcodeImage clone()
       {
          BarcodeImage barcodeImage = new BarcodeImage();
@@ -173,11 +183,14 @@ public class Assig4
          return barcodeImage;
       }
    }
-      
-   /*
-    * Phase 3
+   
+   /**
+    * Phase 3 : DataMatrix 
+    *    Implement of BarcodeIO interface
+    *    cleans, translates, generates, 
+    *    displays
+    * 
     */
-
    public static class DataMatrix implements BarcodeIO
    {
       public static final char BLACK_CHAR = '*';
@@ -186,16 +199,22 @@ public class Assig4
       private String text = "";
       private int actualWidth = 0, actualHeight = 0;
 
+      
+      //default constructor. 
+      //Sets DataMatrix to be blank
       public DataMatrix()
       {
          this.image = new BarcodeImage();
       }
-
+      
+      //Sets DataMatric with image data
       public DataMatrix(BarcodeImage image)
       {
          scan(image);
       }
-
+      
+      //String constructor.
+      //sets DataMatrx with string data
       public DataMatrix(String text)
       {
          readText(text);
@@ -352,11 +371,41 @@ public class Assig4
             rawImage += "|\n";
          }
          System.out.print(rawImage);
-         System.out.println("-------------------------------------------------");
+         System.out.println("--------------------------------------------");
       }
    }
-
-  
-   
-   
+        
 }
+
+/**********OutPut***********************************************
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ *******************************************/
