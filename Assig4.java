@@ -165,6 +165,11 @@ public class Assig4
          return (row < MAX_HEIGHT && row >= 0 && col < MAX_WIDTH && col >= 0 );
       }
 
+      /*
+       * Will checkSize be used here?
+       * 
+       * 
+       */
       private boolean checkSize(String[] data)
       {
          return false;
@@ -272,11 +277,11 @@ public class Assig4
             {
                if (this.image.getPixel(row, column) == true)
                {
-                  text += this.BLACK_CHAR;
+                  text += BLACK_CHAR;
                }
                else
                {
-                  text += this.WHITE_CHAR;
+                  text += WHITE_CHAR;
                }  
             }
             text += "\n";
@@ -303,11 +308,11 @@ public class Assig4
             {
                if (this.image.getPixel(row, column) == true)
                {
-                  output += this.BLACK_CHAR;
+                  output += BLACK_CHAR;
                }
                else
                {
-                  output += this.WHITE_CHAR;
+                  output += WHITE_CHAR;
                }  
             }
             output += "|\n";
@@ -328,7 +333,10 @@ public class Assig4
       {
          return 0;
       }
-
+      /*
+       * With writeCharToCol be used?
+       * 
+       */
       private boolean writeCharToCol(int col, int code)
       {
          return false;
@@ -336,8 +344,8 @@ public class Assig4
 
       private int computeSignalWidth()
       {
-         //Assuming that image has been cleaned up, start at the bottom left corner
-         //and find the width of the image using the bottom solid line
+         //Assuming that image has been cleaned up, start at the bottom left 
+         //corner and find the width of the image using the bottom solid line
          int ctr = 0;
          while (image.getPixel(BarcodeImage.MAX_HEIGHT - 1, ctr) != false)
          {
@@ -348,8 +356,8 @@ public class Assig4
 
       private int computeSignalHeight()
       {
-         //Assuming that image has been cleaned up, start at the bottom left corner
-         //and find the height of the image using the left solid line
+         //Assuming that image has been cleaned up, start at the bottom left 
+         //corner and find the height of the image using the left solid line
          int ctr = BarcodeImage.MAX_HEIGHT - 1;
          while (image.getPixel(ctr, 0) != false)
          {
@@ -357,7 +365,7 @@ public class Assig4
          }
          return ++ctr;
       }
-
+      
       public int getActualWidth()
       {
          return this.actualWidth;
