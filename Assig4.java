@@ -176,8 +176,9 @@ public class Assig4
       }
 
       public BarcodeImage clone()
-      {
+      {  
          BarcodeImage barcodeImage = new BarcodeImage();
+         //barcodeImage = (BarcodeImage) super.clone();
          for (int row = MAX_HEIGHT - 1; row >= 0; row--)
          {
             for (int column = 0; column < MAX_WIDTH; column++)
