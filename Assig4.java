@@ -162,7 +162,7 @@ public class Assig4
       private boolean checkSize(int row, int col)
       {
          //Checks for bounds of rows and col being within Max height/width
-         return (row < MAX_HEIGHT && row > 0 && col < MAX_WIDTH && col > 0 );
+         return (row < MAX_HEIGHT && row >= 0 && col < MAX_WIDTH && col >= 0 );
       }
 
       private boolean checkSize(String[] data)
@@ -235,28 +235,93 @@ public class Assig4
          {
          }
          cleanImage();
-         // set actualWidth and actualHeight
          return true;
       }
 
       public boolean generateImageFromText()
       {
+       //Supposed to be called after the text has been mutated via readText();
+         BarcodeImage newImage = new BarcodeImage();
+         //Assuming that text will be separated by \n, create an array of strings
+         String[] textArray = text.split("\n");
+         //Iterate through each text line, then each char in the line
+         //and if it is not whitespace, then set the pixel as true.
+         for (int row = 0; row < textArray.length; row++)
+         {
+            for (int column = 0; column < textArray[row].length(); column++)
+            {
+               if (textArray[row].charAt(column) != ' ')
+               {
+                  newImage.setPixel(row, column, true);
+               }
+            }
+         }
+         //now that the image has been created from the text, it is out of place
+         //and needs to be shifted. Call cleanImage();
+         cleanImage();
          return true;
       }
 
       public boolean translateImageToText()
       {
+         String text = "";
+         
+         for (int row = 0; row <= BarcodeImage.MAX_HEIGHT - 1; row++)
+         {
+            for (int column = 0; column < BarcodeImage.MAX_WIDTH; column++)
+            {
+               if (this.image.getPixel(row, column) == true)
+               {
+                  text += this.BLACK_CHAR;
+               }
+               else
+               {
+                  text += this.WHITE_CHAR;
+               }  
+            }
+            text += "\n";
+         }
+         this.text = text;
+         System.out.println(text);
          return true;
       }
 
       public void displayTextToConsole()
       {
-
+         System.out.println(this.text);
       }
 
       public void displayImageToConsole()
       {
-
+         String output = getRepeatedString('_', this.actualWidth + 2) + "\n";
+         
+         for (int row = this.actualHeight; row <= BarcodeImage.MAX_HEIGHT - 1;
+               row++)
+         {
+            output += "|";
+            for (int column = 0; column <= this.actualWidth; column++)
+            {
+               if (this.image.getPixel(row, column) == true)
+               {
+                  output += this.BLACK_CHAR;
+               }
+               else
+               {
+                  output += this.WHITE_CHAR;
+               }  
+            }
+            output += "|\n";
+         }
+         output += getRepeatedString('_', this.actualWidth + 2) + "\n";
+         System.out.println(output);
+      }
+      
+      private String getRepeatedString(char charToRepeat, int numOfTimes)
+      {
+         char[] chars = new char[numOfTimes];
+         Arrays.fill(chars, charToRepeat);
+         String result = new String(chars);
+         return result;
       }
 
       private char readCharFromCol(int col)
@@ -271,14 +336,26 @@ public class Assig4
 
       private int computeSignalWidth()
       {
-         // determine size based on spine
-         return 0;
+         //Assuming that image has been cleaned up, start at the bottom left corner
+         //and find the width of the image using the bottom solid line
+         int ctr = 0;
+         while (image.getPixel(BarcodeImage.MAX_HEIGHT - 1, ctr) != false)
+         {
+            ctr++;
+         }
+         return --ctr;
       }
 
       private int computeSignalHeight()
       {
-         // determine size based on spine
-         return 0;
+         //Assuming that image has been cleaned up, start at the bottom left corner
+         //and find the height of the image using the left solid line
+         int ctr = BarcodeImage.MAX_HEIGHT - 1;
+         while (image.getPixel(ctr, 0) != false)
+         {
+            ctr--;
+         }
+         return ++ctr;
       }
 
       public int getActualWidth()
@@ -296,6 +373,8 @@ public class Assig4
          displayRawImage();
          moveImageToLowerLeft();
          displayRawImage();
+         this.actualWidth = computeSignalWidth();
+         this.actualHeight = computeSignalHeight();
       }
 
       private void moveImageToLowerLeft()
@@ -330,7 +409,7 @@ public class Assig4
                inSpine = true;
             } else if (inSpine)
             {
-               return row;
+               return --row;
             }
          }
          return 0;
@@ -346,7 +425,7 @@ public class Assig4
             for (int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
             {
                lowerLeft.setPixel(row, col, this.image.getPixel(
-                              row - diffToBottomRow, col + leftSpineColumn));
+                         row - diffToBottomRow, col + leftSpineColumn));
             }
          }
          image = lowerLeft.clone();
