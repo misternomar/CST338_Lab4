@@ -14,11 +14,11 @@ import java.util.Arrays;
 public class Working_Assig4
 {
    /**
-       * main() 
-       *
-       * @param args the command line arguments
+    * main() 
+    *
+    * @param args the command line arguments
     * @throws CloneNotSupportedException 
-   */
+    **/
    public static void main(String[] args) throws CloneNotSupportedException
    {
       String[] sImageIn =
@@ -62,42 +62,7 @@ public class Working_Assig4
                   "                                          "
 
             };
-      
-      /*
-      String[] sImageIn =
-           {
-                  "                                          ",
-                  "                                          ",
-                  "                                          ",
-                  "* * * * * * * * * * * * * * * * * * * * * ",
-                  "*                                       * ",
-                  "****** **** ****** ******* ** *** *****   ",
-                  "*     *    ****************************** ",
-                  "* **    * *        **  *    * * *   *     ",
-                  "*   *    *  *****    *   * *   *  **  *** ",
-                  "*  **     * *** **   **  *    **  ***  *  ",
-                  "***  * **   **  *   ****    *  *  ** * ** ",
-                  "*****  ***  *  * *   ** ** **  *   * *    ",
-                  "***************************************** "
-           };
-        
-        String[] sImageIn_2 =
-           {
-                  "                                          ",
-                  "                                          ",
-                  "* * * * * * * * * * * * * * * * * * *     ",
-                  "*                                    *    ",
-                  "**** *** **   ***** ****   *********      ",
-                  "* ************ ************ **********    ",
-                  "** *      *    *  * * *         * *       ",
-                  "***   *  *           * **    *      **    ",
-                  "* ** * *  *   * * * **  *   ***   ***     ",
-                  "* *           **    *****  *   **   **    ",
-                  "****  *  * *  * **  ** *   ** *  * *      ",
-                  "**************************************    "
-            };
-        */
-         
+               
          BarcodeImage bc = new BarcodeImage(sImageIn);
          DataMatrix dm = new DataMatrix(bc);
         
@@ -118,11 +83,16 @@ public class Working_Assig4
          dm.generateImageFromText();
          dm.displayTextToConsole();
          dm.displayImageToConsole();
+         
+         dm.readText("This is our custom message!");
+         dm.generateImageFromText();
+         dm.displayTextToConsole();
+         dm.displayImageToConsole();
    }
    
    /**
-       * BarcodeIO
-       **/
+   * BarcodeIO
+   **/
    interface BarcodeIO
    {
          public boolean scan(BarcodeImage bc);
@@ -259,12 +229,11 @@ public class Working_Assig4
    }
    
    /**
-       * Phase 3 : DataMatrix 
-       *    Implement of BarcodeIO interface
-       *    cleans, translates, generates, 
-       *    displays
-       * 
-       */
+    * Phase 3 : DataMatrix 
+    *    Implement of BarcodeIO interface
+    *    cleans, translates, generates, 
+    *    displays
+    */
    public static class DataMatrix implements BarcodeIO
    {
       public static final char BLACK_CHAR = '*';
@@ -524,13 +493,12 @@ public class Working_Assig4
       }
       
       private void cleanImage()
-       {
-          //displayRawImage();
+      {
           moveImageToLowerLeft();
           //displayRawImage();
           this.actualWidth = computeSignalWidth();
           this.actualHeight = computeSignalHeight();
-       }
+      }
 
        private void moveImageToLowerLeft()
        {
@@ -583,35 +551,96 @@ public class Working_Assig4
                           row - diffToBottomRow, col + leftSpineColumn));
              }
           }
-          try {
-         image = (BarcodeImage) lowerLeft.clone();
-      } catch (CloneNotSupportedException e) {
-         // TODO Auto-generated catch block
-         e.printStackTrace();
-      }
+          try 
+          {
+             image = (BarcodeImage) lowerLeft.clone();
+          }catch (CloneNotSupportedException e) 
+          {
+             e.printStackTrace();
+          }
        }
 
        public void displayRawImage()
-         {
-            String rawImage = "";
-            for (int row = 0; row < BarcodeImage.MAX_HEIGHT; row++)
-            {
-               rawImage += "|";
-               for (int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
-               {
-                  if (image.getPixel(row, col))
-                  {
-                     rawImage += "*";
-                  } else
-                  {
-                     rawImage += " ";
-                  }
-               }
-               rawImage += "|\n";
-            }
-            System.out.print(rawImage);
-            System.out.println("--------------------------------------------");
+       {
+          String rawImage = "";
+          for (int row = 0; row < BarcodeImage.MAX_HEIGHT; row++)
+          {
+             rawImage += "|";
+             for (int col = 0; col < BarcodeImage.MAX_WIDTH; col++)
+             {
+                if (image.getPixel(row, col))
+                {
+                   rawImage += "*";
+                } else
+                {
+                   rawImage += " ";
+                }
+             }
+             rawImage += "|\n";
+           }
+           System.out.print(rawImage);
+           System.out.println("--------------------------------------------");
          }
    }
-
 }
+
+/*********************Output*******************
+CSUMB CSIT online program is top notch.
+
+-------------------------------------------
+|* * * * * * * * * * * * * * * * * * * * *|
+|*                                       *|
+|****** **** ****** ******* ** *** *****  |
+|*     *    ******************************|
+|* **    * *        **  *    * * *   *    |
+|*   *    *  *****    *   * *   *  **  ***|
+|*  **     * *** **   **  *    **  ***  * |
+|***  * **   **  *   ****    *  *  ** * **|
+|*****  ***  *  * *   ** ** **  *   * *   |
+|*****************************************|
+-------------------------------------------
+You did it!  Great work.  Celebrate.
+
+----------------------------------------
+|* * * * * * * * * * * * * * * * * * * |
+|*                                    *|
+|**** *** **   ***** ****   *********  |
+|* ************ ************ **********|
+|** *      *    *  * * *         * *   |
+|***   *  *           * **    *      **|
+|* ** * *  *   * * * **  *   ***   *** |
+|* *           **    *****  *   **   **|
+|****  *  * *  * **  ** *   ** *  * *  |
+|**************************************|
+----------------------------------------
+What a great resume builder this is!
+
+--------------------------------------
+|* * * * * * * * * * * * * * * * * * |
+|*                                   |
+|***** * ***** ****** ******* **** **|
+|* **********************************|
+|**  *    *  * * **    *    * *  *  *|
+|* *               *    **     **  * |
+|**  *   * * *  * ***  * ***  *      |
+|**      **    * *    *     *    *  *|
+|** *  * * **   *****  **  *    ** **|
+|************************************|
+--------------------------------------
+This is our custom message!
+
+-----------------------------
+|* * * * * * * * * * * * * *|
+|*                          |
+|***** ** *** ****** *******|
+|* *************************|
+|**  *  *  **  ***     **   |
+|* **  *  *       ** *      |
+|**       **   * *** **   **|
+|*   *  * * * * * *    ** * |
+|*  ** ** **  *** ** *******|
+|***************************|
+-----------------------------
+
+
+*******************************************/
