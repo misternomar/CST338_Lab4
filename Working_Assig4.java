@@ -250,17 +250,17 @@ public class Working_Assig4
       
       public DataMatrix(String text)
       {
-         this(new BarcodeImage());
-         if (!readText(text))
-            readText("");
+         image = new BarcodeImage();
+         readText(text);
       }
       
       public DataMatrix(BarcodeImage image)
       {
-         readText("");
-         
+         text = "";
          if (!scan(image))
-            scan(new BarcodeImage());
+         {
+            this.image = new BarcodeImage();
+         }
       }
       
       
@@ -289,12 +289,14 @@ public class Working_Assig4
       public int getActualWidth() { return actualWidth; }
       public int getActualHeight() { return actualHeight; }
       
-      
       public boolean readText(String text)
       {
-         //mutator for text
+         // mutator for text
          if (text.length() > BarcodeImage.MAX_WIDTH - 2)
+         {
+            this.text = "";
             return false;
+         }
          this.text = text;
          return true;
       }
@@ -306,7 +308,8 @@ public class Working_Assig4
          int strLength = this.text.length();
          String[] str_data = new String[BarcodeImage.MAX_HEIGHT];
          String defaultWhiteSpace = getStringOfMaxWidth(String.
-                            valueOf(DataMatrix.WHITE_CHAR), BarcodeImage.MAX_WIDTH);
+                            valueOf(DataMatrix.WHITE_CHAR),
+                            BarcodeImage.MAX_WIDTH);
          
          //Fill every element of the array with the max amount of white space
          Arrays.fill(str_data, defaultWhiteSpace);
