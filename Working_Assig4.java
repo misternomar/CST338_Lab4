@@ -10,6 +10,7 @@
 import java.lang.Math;
 import java.util.Arrays;
 
+
 public class Working_Assig4
 {
    /**
@@ -462,27 +463,31 @@ public class Working_Assig4
       
       public void displayImageToConsole()
       {
-         String output = getRepeatedString('_', this.actualWidth + 2) + "\n";
+         int row, col;
+         char temp;
          
-         for (int row = this.actualHeight; row <= BarcodeImage.MAX_HEIGHT - 1;
-               row++)
+         // similar to the display method in BarcodeImage, but don't show 
+         //extra space
+         System.out.println();
+         for ( col = 0; col < signalWidth + 2; col++ )
+            System.out.print("-");
+         System.out.println();
+         
+         for (row = BarcodeImage.MAX_HEIGHT - signalHeight; 
+               row < BarcodeImage.MAX_HEIGHT; row++)
          {
-            output += "|";
-            for (int column = 0; column <= this.actualWidth; column++)
+            System.out.print("|");
+            for (col = 0; col < signalWidth; col++)
             {
-               if (this.image.getPixel(row, column) == true)
-               {
-                  output += BLACK_CHAR;
-               }
-               else
-               {
-                  output += WHITE_CHAR;
-               }  
+               temp = boolToChar(image.getPixel(row, col));
+               System.out.print(temp);
             }
-            output += "|\n";
+            System.out.println("|");
          }
-         output += getRepeatedString('_', this.actualWidth + 2) + "\n";
-         System.out.println(output);
+         
+         for ( col = 0; col < signalWidth + 2; col++ )
+            System.out.print("-");
+         System.out.println();
       }
       
       private int computeSignalHeight()
@@ -585,13 +590,7 @@ public class Working_Assig4
          e.printStackTrace();
       }
        }
-     private String getRepeatedString(char charToRepeat, int numOfTimes)
-     {
-        char[] chars = new char[numOfTimes];
-        Arrays.fill(chars, charToRepeat);
-        String result = new String(chars);
-        return result;
-     }
+
        public void displayRawImage()
          {
             String rawImage = "";
