@@ -14,7 +14,7 @@ import java.util.*;
  *
  * @author Team 1
  */
-public class Assig4_1
+public class test
 {
    /**
     * main() 
@@ -130,8 +130,8 @@ public class Assig4_1
        */      
       public BarcodeImage(String[] str_data)
       {
-    	  int row, col, displayRow;
-    	  //instantiate the data and set all to false
+        int row, col, displayRow;
+        //instantiate the data and set all to false
           image_data = new boolean[MAX_HEIGHT][MAX_WIDTH];
           for (row = 0; row < image_data.length; row++)
           {
@@ -311,41 +311,115 @@ public class Assig4_1
          {
          }
          try {
-			cleanImage();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+         cleanImage();
+      } catch (CloneNotSupportedException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
          return true;
       }
 
       public boolean generateImageFromText()
       {
-       //Supposed to be called after the text has been mutated via readText();
-         BarcodeImage newImage = new BarcodeImage();
-         //Assuming that text will be separated by \n, create an array of strings
-         String[] textArray = text.split("\n");
-         //Iterate through each text line, then each char in the line
-         //and if it is not whitespace, then set the pixel as true.
-         for (int row = 0; row < textArray.length; row++)
+         //Supposed to be called after readable text has been mutated 
+         //via readText() and will generate a barcode image from it
+         int strLength = this.text.length();
+         String[] str_data = new String[BarcodeImage.MAX_HEIGHT];
+         String defaultWhiteSpace = getStringOfMaxWidth(String.
+                            valueOf(this.WHITE_CHAR), BarcodeImage.MAX_WIDTH);
+         
+         //Fill every element of the array with the max amount of white space
+         Arrays.fill(str_data, defaultWhiteSpace);
+         
+         String startString = getStringOfMaxWidth(String.
+               valueOf(DataMatrix.BLACK_CHAR) + " ", (strLength + 1) / 2);
+         startString = startString.substring(0, strLength);
+         String stopString = getStringOfMaxWidth(String.
+               valueOf(DataMatrix.BLACK_CHAR), strLength);
+         
+         
+         str_data[0] = startString;
+         //Iterate through all 8 powers of 2, starting with 7 and go to 0
+         //Note: 8 - powerOf2 statement has had an offset of 1 to allow for
+         //the startString (defined above) to be added and allow loop to work.
+         for (int powerOf2 = 7; powerOf2 >=0; powerOf2--)
          {
-            for (int column = 0; column < textArray[row].length(); column++)
+            //Start every barcode image line with a black char
+            str_data[8 - powerOf2] = String.valueOf(DataMatrix.BLACK_CHAR);
+            
+            //Iterate though the entire width of the barcode
+            for (int i = 1; i < BarcodeImage.MAX_WIDTH; i++)
             {
-               if (textArray[row].charAt(column) != ' ')
+               //If the index of the string is still within the length of the
+               //text we're converting, then append either a white or black 
+               //character. Uses generateBitMarker private method for help.
+               if (i < strLength + 1)
                {
-                  newImage.setPixel(row, column, true);
+                  str_data[8 - powerOf2] += 
+                        generateBitMarker(this.text.charAt(i - 1), 7 - powerOf2);
+               }
+               else
+               {
+                  str_data[8 - powerOf2] += DataMatrix.WHITE_CHAR;
                }
             }
          }
-         //now that the image has been created from the text, it is out of place
-         //and needs to be shifted. Call cleanImage();
-         try {
-			cleanImage();
-		} catch (CloneNotSupportedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+         str_data[9] = stopString;
+         //Calls scan, which will mutate the image as well as clean it up.
+         scan(new BarcodeImage(str_data));
          return true;
+      }
+     
+      private String getStringOfMaxWidth(String singleCharToRepeat,
+                                                               int numOfTimes)
+      {
+         //Helper method that will provide a repeated string a specific 
+         //number of times.
+         String output = "";
+         for (int i = 0; i < numOfTimes; i++)
+         {
+            output += singleCharToRepeat;
+         }
+         return output;
+      } 
+      
+      private char generateBitMarker(char letter, int zeroThroughSeven)
+      {
+         //When provided with a char and an integer, will return either a black
+         //or white character depending on the nature of the binary rep of
+         //that ascii character.
+         //The integer represents powers of 2 (0=1, 1=2, 2=4, 3=8, 4=16,
+         //5=32, 6=64, and 7=128)
+         char output = this.WHITE_CHAR;
+         char zeroOrOne;
+         //call helper method to provide the actual binary string of the ascii
+         //character (even though it is a String)
+         zeroOrOne = asciiToBinary(String.valueOf(letter)).
+                                                charAt(zeroThroughSeven);
+         //If the value is 1, or true, then return a black character
+         if (zeroOrOne == '1')
+         {
+            output = this.BLACK_CHAR;
+         }
+         return output;
+      }
+      
+      private String asciiToBinary(String asciiChar)
+      {
+         //Helper method composed to provide a binary string that represents
+         //a single ascii character (represented as a single character String)
+         byte[] bytes = asciiChar.getBytes();
+         StringBuilder binary = new StringBuilder();
+         for (byte b : bytes)
+         {
+            int val = b;
+            for (int i = 0; i < 8; i++)
+            {
+               binary.append((val & 128) == 0 ? 0 : 1);
+               val <<= 1; //left bit shift, equivenant to val *= 2^1
+            }
+         }
+         return binary.toString();
       }
 
       public boolean translateImageToText()
